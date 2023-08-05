@@ -1,10 +1,15 @@
 const WebSocket = require('ws');
 const { default: axios } = require('axios');
 const { uploadToS3 } = require('./lib/utils');
+const express = require('express');
+const http = require('http');
 
+
+const app = express();
+const server = http.createServer(app);
 
 // Create a WebSocket server
-const wss = new WebSocket.Server({ port: 8080 });
+const wss = new WebSocket.Server({ server });
 
 // Store connected clients with unique IDs
 const clients = new Map();
@@ -67,4 +72,8 @@ wss.on('connection', (ws) => {
     });
 });
 
-console.log(`WebSocket server listening on port ${wss.options.port}`);
+const port = process.env.PORT || 3000;
+
+server.listen(port, () => {
+    console.log(`Server listening on port ${port}`);
+});

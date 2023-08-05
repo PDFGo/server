@@ -26,7 +26,7 @@ function generateClientId() {
   return Math.random().toString(36).substr(2, 8);
 }
 
-const ws = new WebSocket('ws://gopdf-server.onrender.com:8080');
+const ws = new WebSocket('ws://localhost:3000');
 
 ws.on('open', () => {
   console.log('Connected to the WebSocket server.');
