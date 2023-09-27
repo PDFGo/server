@@ -38,7 +38,7 @@ wss.on('connection', (ws) => {
         try {
 
             // Extract images from PDF
-            let res = await axios.post('https://gopdf-fastapi.onrender.com/api/v1/pdf/extract/images', {
+            let res = await axios.post('https://uxzimw7ce725czl4fjimjj5hle0uuqla.lambda-url.us-east-1.on.aws/api/v1/pdf/extract/images', {
                 base64: base64
             })
             let images = res.data.images;
