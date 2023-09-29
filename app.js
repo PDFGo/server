@@ -78,11 +78,11 @@ wss.on('connection', (ws) => {
     });
 });
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8080;
 
 server.listen(port, () => {
     console.log(`Server listening on port ${port}`);
 });
 
 
-// module.exports.handler = serverless(app);
+// module.exports = app;
