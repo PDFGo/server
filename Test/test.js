@@ -26,7 +26,7 @@ function generateClientId() {
   return Math.random().toString(36).substr(2, 8);
 }
 
-const ws = new WebSocket('wss://5qwfw9jy82.execute-api.ap-south-1.amazonaws.com/v1');
+const ws = new WebSocket('wss://versatile-brace-313719.el.r.appspot.com');
 // const ws = new WebSocket('wss://0.0.0.0:8000');
 
 ws.on('open', () => {
