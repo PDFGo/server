@@ -17,14 +17,14 @@ app.get('/', (req, res) => {
 // Create a WebSocket server
 const wss = new WebSocket.Server({ server });
 
-// Store connected clients with unique IDs
+// Store connected clients with unique client_ids
 const clients = new Map();
 
 
 // Function to broadcast data to specific client
-function broadcastData(clientId, data) {
-    if (clients.has(clientId)) {
-        const client = clients.get(clientId);
+function broadcastData(clientclient_id, data) {
+    if (clients.has(clientclient_id)) {
+        const client = clients.get(clientclient_id);
         client.send(data);
     }
 }
@@ -36,10 +36,10 @@ wss.on('connection', (ws) => {
     ws.on('message', async (message) => {
         // Handle incoming data from clients
         const data = JSON.parse(message);
-        const { id, base64 } = data;
-        clients.set(id, ws);
+        const { client_id, base64, file_id } = data;
+        clients.set(client_id, ws);
 
-        console.log(`Client ${id} connected.`);
+        console.log(`Client ${client_id} connected.`);
 
         try {
 
@@ -52,10 +52,10 @@ wss.on('connection', (ws) => {
             // Upload images to S3
             for (let i = 0; i < images.length; i++) {
                 let image = images[i];
-                let url = await uploadToS3(image, id);
+                let url = await uploadToS3(image, client_id, file_id);
                 // Broadcast data to client
-                broadcastData(id, JSON.stringify({
-                    id: id,
+                broadcastData(client_id, JSON.stringify({
+                    client_id: client_id,
                     url: url,
                     total: images.length
                 }));
@@ -63,8 +63,8 @@ wss.on('connection', (ws) => {
             ws.close();
         } catch (error) {
             console.error('Error parsing message:', error);
-            broadcastData(id, JSON.stringify({
-                id: id,
+            broadcastData(client_id, JSON.stringify({
+                client_id: client_id,
                 error: 'Error parsing message'
             }));
         }
