@@ -26,7 +26,7 @@ function generateClientId() {
   return Math.random().toString(36).substr(2, 8);
 }
 
-const ws = new WebSocket('wss://versatile-brace-313719.el.r.appspot.com');
+const ws = new WebSocket('wss://gopdf-server.onrender.com');
 // const ws = new WebSocket('wss://0.0.0.0:8000');
 
 ws.on('open', () => {
