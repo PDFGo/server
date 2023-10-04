@@ -15,18 +15,24 @@ app.get('/', (req, res) => {
 });
 
 // get all files from S3 bucket
-app.get('/view/:client_id', (req, res) => {
-    getFilesFromS3(req.params.client_id).then((files) => {
+app.get('/view', (req, res) => {
+    const { client_id, key } = req.query;
+    getFilesFromS3(client_id, key).then((files) => {
         files = files.map((file) => {
             return {
                 url: `https://pdf-expert.s3.ap-south-1.amazonaws.com/${file.Key}`,
                 pdfKey: file.Key.split('/')[1],
                 fileName: file.Key.split('/')[2],
                 lastModified: file.LastModified,
-                size: file.Size
+                size: file.Size,
             }
         });
-        res.json({ files: files, client_id: req.params.client_id }
+        res.json({
+            files: files, query: {
+                client_id: client_id,
+                key: key
+            }, total: files.length
+        }
         );
     }).catch((error) => {
         console.error(error);
