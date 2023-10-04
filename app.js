@@ -1,6 +1,6 @@
 const WebSocket = require('ws');
 const { default: axios } = require('axios');
-const { uploadToS3 } = require('./lib/utils');
+const { uploadToS3, getFilesFromS3 } = require('./lib/utils');
 const express = require('express');
 const http = require('http');
 // const serverless = require('serverless-http');
@@ -14,12 +14,32 @@ app.get('/', (req, res) => {
     res.send('Hello from goPdf')
 });
 
+// get all files from S3 bucket
+app.get('/view/:client_id', (req, res) => {
+    getFilesFromS3(req.params.client_id).then((files) => {
+        files = files.map((file) => {
+            return {
+                url: `https://pdf-expert.s3.ap-south-1.amazonaws.com/${file.Key}`,
+                pdfKey: file.Key.split('/')[1],
+                fileName: file.Key.split('/')[2],
+                lastModified: file.LastModified,
+                size: file.Size
+            }
+        });
+        res.json({ files: files, client_id: req.params.client_id }
+        );
+    }).catch((error) => {
+        console.error(error);
+        res.send('Error fetching files from S3');
+
+    });
+});
+
 // Create a WebSocket server
 const wss = new WebSocket.Server({ server });
 
 // Store connected clients with unique client_ids
 const clients = new Map();
-
 
 // Function to broadcast data to specific client
 function broadcastData(clientclient_id, data) {
@@ -83,6 +103,7 @@ const port = process.env.PORT || 8080;
 server.listen(port, () => {
     console.log(`Server listening on port ${port}`);
 });
+
 
 
 // module.exports = app;
