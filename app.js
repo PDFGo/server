@@ -12,6 +12,7 @@ const server = http.createServer(app);
 
 // middleware
 app.use(cors());
+app.use(express.json());
 
 // Test route
 app.get('/', (req, res) => {
@@ -44,6 +45,35 @@ app.get('/view', (req, res) => {
 
     });
 });
+
+app.post('/shorturl', (req, res) => {
+    let data = JSON.stringify({
+        "long_url": req.body.url,
+    });
+    let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: 'https://api-ssl.bitly.com/v4/shorten',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer eb5d1643bc5fd98958c986313b62b7058f70847d'
+        },
+        data: data
+    };
+
+    axios.request(config)
+        .then((response) => {
+            // console.log(JSON.stringify(response.data));
+            res.json({
+                url: response.data.link,
+                id: response.data.id
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+
+})
 
 // Create a WebSocket server
 const wss = new WebSocket.Server({ server });
