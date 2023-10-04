@@ -4,10 +4,14 @@ const { uploadToS3, getFilesFromS3 } = require('./lib/utils');
 const express = require('express');
 const http = require('http');
 // const serverless = require('serverless-http');
+const cors = require('cors')
 
 
 const app = express();
 const server = http.createServer(app);
+
+// middleware
+app.use(cors());
 
 // Test route
 app.get('/', (req, res) => {
