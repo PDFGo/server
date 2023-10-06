@@ -56,7 +56,7 @@ app.post('/shorturl', (req, res) => {
         url: 'https://api-ssl.bitly.com/v4/shorten',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer eb5d1643bc5fd98958c986313b62b7058f70847d'
+            'Authorization': 'Bearer 1190383c76f32c319c324ea5c713d0130c422d54'
         },
         data: data
     };
