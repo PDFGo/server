@@ -36,7 +36,7 @@ ws.on('open', () => {
   const clientId = generateClientId();
   const fileId = generateClientId();
   convertPdfToBase64('./test.pdf').then((base64) => {
-    const registerData = { base64: base64, client_id: clientId, fileId: fileId };
+    const registerData = { base64: base64, client_id: clientId, file_id: fileId };
     console.log(registerData);
     ws.send(JSON.stringify(registerData));
   }).catch((error) => {
