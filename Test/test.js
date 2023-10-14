@@ -26,16 +26,18 @@ function generateClientId() {
   return Math.random().toString(36).substr(2, 8);
 }
 
-const ws = new WebSocket('wss://gopdf-server.onrender.com');
-// const ws = new WebSocket('wss://0.0.0.0:8000');
+// const ws = new WebSocket('wss://gopdf-server.onrender.com');
+const ws = new WebSocket('ws://localhost:8080');
 
 ws.on('open', () => {
   console.log('Connected to the WebSocket server.');
 
   // Register the client with a unique ID on the server
   const clientId = generateClientId();
+  const fileId = generateClientId();
   convertPdfToBase64('./test.pdf').then((base64) => {
-    const registerData = { base64: base64, id: clientId };
+    const registerData = { base64: base64, client_id: clientId, fileId: fileId };
+    console.log(registerData);
     ws.send(JSON.stringify(registerData));
   }).catch((error) => {
     console.error('Error converting PDF to base64:', error);
