@@ -56,7 +56,7 @@ app.post('/shorturl', (req, res) => {
         url: 'https://api-ssl.bitly.com/v4/shorten',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer 1190383c76f32c319c324ea5c713d0130c422d54'
+            'Authorization': `Bearer ` + process.env.BITLY_TOKEN
         },
         data: data
     };
@@ -104,7 +104,7 @@ wss.on('connection', (ws) => {
         try {
 
             // Extract images from PDF
-            let res = await axios.post('https://ap3ato5ql6nnr5rkwrrlpo33di0xmves.lambda-url.ap-south-1.on.aws/api/v1/pdf/extract/images', {
+            let res = await axios.post(process.env.SERVERLESS_URL, {
                 base64: base64
             })
             let images = res.data.images;
