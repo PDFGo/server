@@ -2,3 +2,4 @@
 .env
 test.pdf
 .DS_Store
+ecosystem.config.js
